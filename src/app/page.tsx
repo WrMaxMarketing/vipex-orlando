@@ -4,44 +4,37 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
-  BookOpen,
-  Building,
-  Calendar,
-  CheckCircle,
-  Clock,
-  Download,
-  Gift,
-  Heart,
-  MapPin,
-  Menu,
-  PiggyBank,
-  Plane,
-  Quote,
-  Shield,
-  Sparkles,
-  Star,
-  Target,
-  Ticket,
-  Timer,
-  TrendingUp,
-  Users,
-  UtensilsCrossed,
-  X,
-  Zap,
+  BookOpen, Building, Calendar, CheckCircle, Clock, Download, Gift, Heart, MapPin,
+  Menu, PiggyBank, Plane, Quote, Shield, Sparkles, Star, Target, Ticket, Timer,
+  TrendingUp, Users, UtensilsCrossed, X, Zap
 } from "lucide-react"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
-/** Pequeno helper para enviar o evento ao GA4 via dataLayer no cliente */
-function trackCTA(location: "hero" | "footer") {
+/* ===== Tipos para GA4 dataLayer (remove any) ===== */
+type CtaLocation = "hero" | "footer"
+type DataLayerEvent = {
+  event: "cta_click"
+  cta_label: string
+  cta_location: CtaLocation
+  link_url: string
+  product: string
+}
+declare global {
+  interface Window {
+    dataLayer: DataLayerEvent[]
+  }
+}
+function trackCTA(location: CtaLocation) {
   if (typeof window === "undefined") return
-    ; (window as any).dataLayer = (window as any).dataLayer || []
-    ; (window as any).dataLayer.push({
-      event: "cta_click",
-      cta_label: "Garantir Meu eBook Agora",
-      cta_location: location,
-      link_url: "https://pay.kiwify.com.br/DIp4nQ6",
-      product: "Ebook Disney",
-    })
+  if (!Array.isArray(window.dataLayer)) window.dataLayer = []
+  window.dataLayer.push({
+    event: "cta_click",
+    cta_label: "Garantir Meu eBook Agora",
+    cta_location: location,
+    link_url: "https://pay.kiwify.com.br/DIp4nQ6",
+    product: "Ebook Disney",
+  })
 }
 
 export default function DisneyEbookLanding() {
@@ -49,7 +42,6 @@ export default function DisneyEbookLanding() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [timeLeft, setTimeLeft] = useState<{ h: number; m: number; s: number }>({ h: 47, m: 59, s: 59 })
 
-  // contador regressivo (48h rolante)
   useEffect(() => {
     const end = Date.now() + 1000 * 60 * 60 * 48
     const t = setInterval(() => {
@@ -63,13 +55,11 @@ export default function DisneyEbookLanding() {
   }, [])
 
   const toggleFaq = (index: number) => setOpenFaq(openFaq === index ? null : index)
-
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) element.scrollIntoView({ behavior: "smooth" })
     setMobileMenuOpen(false)
   }
-
   const goToPurchase = () => {
     window.open("https://pay.kiwify.com.br/DIp4nQ6", "_blank")
     setMobileMenuOpen(false)
@@ -90,159 +80,96 @@ export default function DisneyEbookLanding() {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href="/" className="flex-shrink-0">
-              <img
-                src="/images/disneyland/vipex-logo.png"
-                alt="Vipex - Assessoria de Viagens"
-                className="h-4 sm:h-6 w-auto lg:ml-[50px] transition-transform hover:scale-105 cursor-pointer"
-              />
-            </a>
+            <Link href="/" className="flex-shrink-0" aria-label="Vipex - Assessoria de Viagens">
+              <img src="/images/disneyland/vipex-logo.png" alt="Vipex - Assessoria de Viagens" className="h-4 sm:h-6 w-auto lg:ml-[50px] transition-transform hover:scale-105 cursor-pointer" />
+            </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <button onClick={() => scrollToSection("porque-funciona")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                Por que funciona?
-              </button>
-              <button onClick={() => scrollToSection("conteudo")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                Conteúdo
-              </button>
-              <button onClick={() => scrollToSection("faq")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                FAQ
-              </button>
-              <Button onClick={goToPurchase} className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-semibold shadow-lg hover:shadow-xl transition-all">
-                Comprar Agora
-              </Button>
+              <button onClick={() => scrollToSection("porque-funciona")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Por que funciona?</button>
+              <button onClick={() => scrollToSection("conteudo")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Conteúdo</button>
+              <button onClick={() => scrollToSection("faq")} className="text-gray-700 hover:text-blue-600 font-medium transition-colors">FAQ</button>
+              <Button onClick={goToPurchase} className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-semibold shadow-lg hover:shadow-xl transition-all">Comprar Agora</Button>
             </nav>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200"
-            >
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200">
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Drawer */}
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
-              <nav className="flex flex-col space-y-4 pt-4">
-                <button
-                  onClick={() => scrollToSection("porque-funciona")}
-                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                >
-                  Por que funciona?
-                </button>
-                <button
-                  onClick={() => scrollToSection("conteudo")}
-                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                >
-                  Conteúdo
-                </button>
-                <button
-                  onClick={() => scrollToSection("faq")}
-                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                >
-                  FAQ
-                </button>
-                <Button
-                  onClick={goToPurchase}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 w-full"
-                >
-                  Comprar Agora
-                </Button>
-              </nav>
-            </div>
+            <>
+              <div onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]" />
+              <div className="fixed top-0 right-0 h-full w-[86%] max-w-sm z-[70] bg-white shadow-2xl border-l border-gray-200 animate-in slide-in-from-right duration-300 flex flex-col">
+                <div className="flex items-center justify-between px-5 py-4 border-b">
+                  <img src="/images/disneyland/vipex-logo.png" alt="Vipex" className="h-6" />
+                  <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-md hover:bg-gray-100"><X className="h-5 w-5" /></button>
+                </div>
+                <nav className="flex-1 px-5 py-4 space-y-2">
+                  <button onClick={() => scrollToSection("porque-funciona")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">Por que funciona?</button>
+                  <button onClick={() => scrollToSection("conteudo")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">Conteúdo</button>
+                  <button onClick={() => scrollToSection("faq")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">FAQ</button>
+                </nav>
+                <div className="px-5 pb-6">
+                  <Button onClick={goToPurchase} className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg glow-pulse">Comprar Agora</Button>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center relative overflow-hidden py-6 sm:py-10 px-4 mt-[-30px] lg:mt-[-40px]">
-        {/* BG image */}
-        {/* BG image + overlay escuro */}
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 pt-20 sm:pt-24 pb-10 lg:pt-10 lg:pb-12 mt-0 lg:mt-[-32px]">
         <div className="absolute inset-0">
-          <img
-            src="images/disneyland/disney-castle-magical-background-with-fireworks.png"
-            alt="Disney Background"
-            className="w-full h-full object-cover"
-          />
-          {/* overlay mais forte */}
+          <img src="images/disneyland/disney-castle-magical-background-with-fireworks.png" alt="Disney Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 hero-overlay-strong" />
         </div>
-
-        {/* Estrelinhas por cima (bem discretas) */}
         <div className="pointer-events-none absolute inset-0">
           {[...Array(18)].map((_, i) => (
-            <span
-              key={i}
-              className="absolute twinkle"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: `${Math.random() * 3 + 2}px`,
-                height: `${Math.random() * 3 + 2}px`,
-                background: "rgba(255,255,255,.85)",
-                borderRadius: "9999px",
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            />
+            <span key={i} className="absolute twinkle" style={{
+              top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 3 + 2}px`, height: `${Math.random() * 3 + 2}px`,
+              background: "rgba(255,255,255,.85)", borderRadius: "9999px",
+              animationDelay: `${Math.random() * 2}s`
+            }} />
           ))}
         </div>
-
-
         <div className="container mx-auto max-w-6xl relative z-10">
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Texto */}
             <div className="text-center lg:text-left space-y-6 order-2 lg:order-1">
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-tight text-balance">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-tight">
                 Realize sua viagem dos sonhos para a Disney{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-300 to-purple-300">
-                  gastando até 60% menos
-                </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-300 to-purple-300">gastando até 60% menos</span>
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-white/90 leading-relaxed text-pretty max-w-2xl mx-auto lg:mx-0 font-medium">
-                50+ dicas práticas para pagar menos em passagens, hospedagem, ingressos e dentro dos parques — sem
-                perder a magia.
+              <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-2xl mx-auto lg:mx-0 font-medium">
+                50+ dicas práticas para pagar menos em passagens, hospedagem, ingressos e dentro dos parques — sem perder a magia.
               </p>
-
               <div className="space-y-3 sm:space-y-4">
                 <a href="https://pay.kiwify.com.br/DIp4nQ6" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA("hero")} className="block">
-                  <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 hover:scale-105 transition-all duration-300 text-white px-6 py-4 text-base lg:text-lg font-semibold shadow-xl hover:shadow-2xl glow-pulse">
-                    <Download className="mr-2 h-5 w-5" />
-                    Baixar eBook Premium Agora
+                  <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 hover:scale-105 transition-all text-white px-6 py-4 text-base lg:text-lg font-semibold shadow-xl hover:shadow-2xl glow-pulse">
+                    <Download className="mr-2 h-5 w-5" /> Baixar eBook Premium Agora
                   </Button>
                 </a>
                 <p className="text-xs sm:text-sm lg:text-base text-white/90 flex items-center justify-center lg:justify-start gap-2 font-medium">
-                  <Sparkles className="w-4 h-4 text-yellow-300" />
-                  Acesso imediato após o pagamento
+                  <Sparkles className="w-4 h-4 text-yellow-300" /> Acesso imediato após o pagamento
                 </p>
               </div>
-
-              {/* Badges */}
               <div className="flex flex-row flex-wrap gap-3 items-center justify-center lg:justify-start">
-                <Badge className="bg-blue-600 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg">
-                  <Shield className="w-4 h-4 mr-2" /> Compra segura
-                </Badge>
-                <Badge className="bg-purple-700 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg">
-                  <Clock className="w-4 h-4 mr-2" /> Preço promocional
-                </Badge>
-                <Badge className="bg-pink-700 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg">
-                  <CheckCircle className="w-4 h-4 mr-2" /> Conteúdo testado
-                </Badge>
+                <Badge className="bg-blue-600 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg"><Shield className="w-4 h-4 mr-2" /> Compra segura</Badge>
+                <Badge className="bg-purple-700 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg"><Clock className="w-4 h-4 mr-2" /> Preço promocional</Badge>
+                <Badge className="bg-pink-700 text-white border-0 px-3 py-2 text-xs sm:text-sm font-medium shadow-lg"><CheckCircle className="w-4 h-4 mr-2" /> Conteúdo testado</Badge>
               </div>
             </div>
-
             {/* Imagem do eBook */}
-            <div className="flex justify-center animate-float order-1 lg:order-2 lg:mt-[10px] mb-[-50px]">
+            <div className="flex justify-center animate-float order-1 lg:order-2 mt-[20px] lg:mt-[10px]">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 rounded-3xl blur-3xl opacity-40 scale-110" />
-                <img
-                  src="images/disneyland/disney-ebook-new-cover.png"
-                  alt="Guia Completo para Economizar na Disney - eBook"
-                  className="relative z-10 drop-shadow-2xl rounded-3xl w-56 md:w-72 lg:w-96 h-auto mt-50"
-                />
-                <div className="absolute -top-3 -right-4 bg-green-600 text-white px-4 py-2 rounded-full font-bold text-sm md:text-base border-2 border-green-400 animate-pulse">
+                <img src="images/disneyland/disney-ebook-new-cover.png" alt="Guia Completo para Economizar na Disney - eBook" className="relative z-10 drop-shadow-2xl rounded-3xl w-56 md:w-72 lg:w-96 h-auto" />
+                <div className="absolute top-2 right-2 md:-top-3 md:-right-4 bg-green-600 text-white px-4 py-2 rounded-full font-bold text-sm md:text-base border-2 border-green-400 animate-pulse">
                   por apenas <strong>R$ 47</strong>
                 </div>
               </div>
