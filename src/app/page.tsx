@@ -8,8 +8,8 @@ import {
   Menu, PiggyBank, Plane, Quote, Shield, Sparkles, Star, Target, Ticket, Timer,
   TrendingUp, Users, UtensilsCrossed, X, Zap
 } from "lucide-react"
-import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 /* ===== Tipos para GA4 dataLayer (remove any) ===== */
 type CtaLocation = "hero" | "footer"
@@ -81,7 +81,7 @@ export default function DisneyEbookLanding() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0" aria-label="Vipex - Assessoria de Viagens">
-              <img src="/images/disneyland/vipex-logo.png" alt="Vipex - Assessoria de Viagens" className="h-4 sm:h-6 w-auto lg:ml-[50px] transition-transform hover:scale-105 cursor-pointer" />
+              <img src="/images/disneyland/vipex-logo.png" alt="Vipex - Assessoria de Viagens" className="h-4 sm:h-6 w-auto  transition-transform hover:scale-105 cursor-pointer" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -100,23 +100,34 @@ export default function DisneyEbookLanding() {
 
           {/* Mobile Drawer */}
           {mobileMenuOpen && (
-            <>
-              <div onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]" />
-              <div className="fixed top-0 right-0 h-full w-[86%] max-w-sm z-[70] bg-white shadow-2xl border-l border-gray-200 animate-in slide-in-from-right duration-300 flex flex-col">
-                <div className="flex items-center justify-between px-5 py-4 border-b">
-                  <img src="/images/disneyland/vipex-logo.png" alt="Vipex" className="h-6" />
-                  <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-md hover:bg-gray-100"><X className="h-5 w-5" /></button>
-                </div>
-                <nav className="flex-1 px-5 py-4 space-y-2">
-                  <button onClick={() => scrollToSection("porque-funciona")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">Por que funciona?</button>
-                  <button onClick={() => scrollToSection("conteudo")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">Conteúdo</button>
-                  <button onClick={() => scrollToSection("faq")} className="w-full text-left px-3 py-3 rounded-lg hover:bg-gray-100">FAQ</button>
-                </nav>
-                <div className="px-5 pb-6">
-                  <Button onClick={goToPurchase} className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg glow-pulse">Comprar Agora</Button>
-                </div>
-              </div>
-            </>
+            <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
+              <nav className="flex flex-col space-y-4 pt-4">
+                <button
+                  onClick={() => scrollToSection("porque-funciona")}
+                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                >
+                  Por que funciona?
+                </button>
+                <button
+                  onClick={() => scrollToSection("conteudo")}
+                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                >
+                  Conteúdo
+                </button>
+                <button
+                  onClick={() => scrollToSection("faq")}
+                  className="text-left text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+                >
+                  FAQ
+                </button>
+                <Button
+                  onClick={goToPurchase}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 w-full"
+                >
+                  Comprar Agora
+                </Button>
+              </nav>
+            </div>
           )}
         </div>
       </header>
@@ -150,7 +161,7 @@ export default function DisneyEbookLanding() {
               </p>
               <div className="space-y-3 sm:space-y-4">
                 <a href="https://pay.kiwify.com.br/DIp4nQ6" target="_blank" rel="noopener noreferrer" onClick={() => trackCTA("hero")} className="block">
-                  <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 hover:scale-105 transition-all text-white px-6 py-4 text-base lg:text-lg font-semibold shadow-xl hover:shadow-2xl glow-pulse">
+                  <Button size="lg" className="w-[300px] sm:w-auto bg-green-600 hover:bg-green-700 hover:scale-105 transition-all text-white px-6 py-4 text-base lg:text-lg font-semibold shadow-xl hover:shadow-2xl glow-pulse mb-[20px]">
                     <Download className="mr-2 h-5 w-5" /> Baixar eBook Premium Agora
                   </Button>
                 </a>
@@ -165,7 +176,7 @@ export default function DisneyEbookLanding() {
               </div>
             </div>
             {/* Imagem do eBook */}
-            <div className="flex justify-center animate-float order-1 lg:order-2 mt-[20px] lg:mt-[10px]">
+            <div className="flex justify-center animate-float order-1 lg:order-2 mt-[-100px] lg:mt-[10px] mb-[-50px]">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 rounded-3xl blur-3xl opacity-40 scale-110" />
                 <img src="images/disneyland/disney-ebook-new-cover.png" alt="Guia Completo para Economizar na Disney - eBook" className="relative z-10 drop-shadow-2xl rounded-3xl w-56 md:w-72 lg:w-96 h-auto" />
@@ -479,8 +490,8 @@ export default function DisneyEbookLanding() {
         <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/90 to-black/80" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-8xl mx-auto text-center text-white">
-            <h2 className="font-black text-4xl md:text-6xl mb-6 leading-tight">
-              Sua viagem Disney dos sonhos
+            <h2 className="font-black text-4xl md:text-5xl mb-6 leading-tight">
+              Sua viagem <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Disney</span> dos sonhos
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">começa agora!</span>
             </h2>
