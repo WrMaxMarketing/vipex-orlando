@@ -40,7 +40,7 @@ function trackCTA(location: CtaLocation) {
 export default function DisneyEbookLanding() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [timeLeft, setTimeLeft] = useState<{ h: number; m: number; s: number }>({ h: 47, m: 59, s: 59 })
+  const [timeLeft, setTimeLeft] = useState<{ h: number; m: number; s: number }>({ h: 24, m: 59, s: 59 })
 
   useEffect(() => {
     const end = Date.now() + 1000 * 60 * 60 * 48
@@ -135,7 +135,7 @@ export default function DisneyEbookLanding() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 pt-20 sm:pt-24 pb-10 lg:pt-10 lg:pb-12 mt-0 lg:mt-[-32px]">
         <div className="absolute inset-0">
-          <img src="images/disneyland/disney-castle-magical-background-with-fireworks.png" alt="Disney Background" className="w-full h-full object-cover" />
+          <img src="images/disneyland/disney-bg.jpg" alt="Disney Background" className="w-full h-full object-cover" />
           <div className="absolute inset-0 hero-overlay-strong" />
         </div>
         <div className="pointer-events-none absolute inset-0">
